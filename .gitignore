@@ -1,3 +1,4 @@
 sendgrid.env
 Gemfile.lock
 database.txt
+message.txt

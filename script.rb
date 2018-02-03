@@ -4,18 +4,21 @@ require 'sendgrid-ruby'
 include SendGrid
 
 # import database
-data = File.open("database.txt")
+data = File.read('database.txt').split("\n")
 
 # parameters
-from = Email.new(email: 'abc@xyz.com')
-subject = 'Sending with SendGrid is Fun'
-content = Content.new(type: 'text/plain', value: 'and easy to do anywhere, even with Ruby')
+from = Email.new(email: 'rohitner@tesla.com')
+subject = 'Sendgrid Subject'
+message = File.read('message.txt')
+content = Content.new(type: 'text/plain', value: message)
+
+# setup API
+sg = SendGrid::API.new(api_key: ENV['SENDGRID_API_KEY'])
 
 # mass mailing!
 data.each do |id|
   to = Email.new(email: id)
   mail = Mail.new(from, subject, to, content)
-  sg = SendGrid::API.new(api_key: ENV['SENDGRID_API_KEY'])
   response = sg.client.mail._('send').post(request_body: mail.to_json)
   puts response.status_code
   puts response.body
